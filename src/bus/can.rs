@@ -2,7 +2,7 @@ use log::{debug, warn};
 use std::fs;
 use yaml_rust2::{Yaml, YamlLoader};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Translation {
     pub en: Option<String>,
     pub fr: Option<String>,
@@ -66,6 +66,15 @@ impl Translation {
             Some(translation)
         } else {
             None
+        }
+    }
+
+    pub fn get(&self, language: &str) -> &str {
+        match language {
+            "en" => self.en.as_deref().unwrap_or(""),
+            "fr" => self.fr.as_deref().unwrap_or(""),
+            "de" => self.de.as_deref().unwrap_or(""),
+            _ => self.en.as_deref().unwrap_or(""),
         }
     }
 }
@@ -179,7 +188,7 @@ impl Signal {
                             }
                         }
                         "comment" => {
-                            signal.comment = Translation::from_yaml(value);
+                            signal.comment = Translation::from_yaml(&value);
                         }
                         "values" => {
                             if let Yaml::Hash(value_hash) = value {
@@ -277,7 +286,7 @@ impl CanMessage {
                             }
                         }
                         "comment" => {
-                            message.comment = Translation::from_yaml(value);
+                            message.comment = Translation::from_yaml(&value);
                         }
                         "type" => {
                             if let Yaml::String(v) = value {

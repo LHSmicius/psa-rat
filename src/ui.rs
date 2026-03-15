@@ -46,11 +46,12 @@ pub fn ui(frame: &mut Frame, app: &app::App) {
         list_items.push(widgets::ListItem::new(text::Line::from(
             text::Span::styled(
                 format!(
-                    "{: <10}|{: <30}|{: >4}|{: >2}",
+                    "{: <10}|{: <30}|{: >4}|{: >2}|{: <30}",
                     item.id.unwrap(),
                     item.name.unwrap().chars().take(30).collect::<String>(),
                     item.periodicity.unwrap(),
                     item.length.unwrap(),
+                    item.comment.unwrap_or_default().get("en"),
                 ),
                 style::Style::default().fg(style::Color::Yellow),
             ),
