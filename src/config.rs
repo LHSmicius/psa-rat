@@ -8,7 +8,7 @@ pub struct Config {
 }
 
 impl Config {
-    fn get_default_config() -> Config {
+    fn generate_default_config() -> Config {
         Config {
             database_dir: String::from("../PSA-RE/buses/AEE2004.full/HS.IS/"),
             default_lang: String::from("en"),
@@ -20,7 +20,7 @@ impl Config {
             .expect("Failed to parse YAML content of configuration file.");
         let doc = &docs[0];
 
-        let mut config = Self::get_default_config();
+        let mut config = Self::generate_default_config();
 
         if let Yaml::Hash(hash) = doc {
             for (key, value) in hash {
@@ -82,7 +82,7 @@ impl Config {
             let config = Self::load_config_str(&yaml_content);
             config
         } else {
-            let config = Self::get_default_config();
+            let config = Self::generate_default_config();
             debug!("Config file not found. Creating default one.");
             let config = Self::save_config(file_path, config);
             config
