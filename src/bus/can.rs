@@ -25,6 +25,16 @@ pub struct Signal {
     pub unused: Option<bool>,
 }
 
+#[derive(Debug, Clone, Default)]
+pub enum BusType {
+    CAN,
+    // VAN,
+    // KLINE,
+    ERROR,
+    #[default]
+    NA,
+}
+
 #[derive(Debug, Clone)]
 pub struct CanMessage {
     pub id: Option<String>,
@@ -32,7 +42,7 @@ pub struct CanMessage {
     pub alt_names: Option<Vec<String>>,
     pub length: Option<i64>,
     pub comment: Option<Translation>,
-    pub bus_type: Option<String>,
+    pub bus_type: BusType,
     pub periodicity: Option<i64>,
     pub senders: Vec<String>,
     pub receivers: Vec<String>,
@@ -237,7 +247,7 @@ impl CanMessage {
             alt_names: None,
             length: None,
             comment: None,
-            bus_type: None,
+            bus_type: BusType::NA,
             periodicity: None,
             senders: Vec::new(),
             receivers: Vec::new(),
@@ -290,7 +300,14 @@ impl CanMessage {
                         }
                         "type" => {
                             if let Yaml::String(v) = value {
-                                message.bus_type = Some(v.clone());
+                                // message.bus_type = Some(v.clone());
+                                message.bus_type = match v.as_str() {
+                                    "can" => BusType::CAN,
+                                    _ => {
+                                        warn!("Unknown BusType {v}");
+                                        BusType::ERROR
+                                    }
+                                }
                             } else {
                                 Self::log_warn_wrong_type(k);
                             }
