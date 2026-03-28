@@ -259,6 +259,8 @@ impl Signal {
                             warn!("[WARNING] Unknown CAN signal parameter \"{}\".", k);
                         }
                     }
+                } else {
+                    Self::log_warn_wrong_type("NAME");
                 }
             }
         }
@@ -395,6 +397,8 @@ impl CanMessage {
                                         debug!("Loading CAN signal: {}.", signal_name);
                                         let signal = Signal::from_yaml(signal_value);
                                         message.signals.push((signal_name.clone(), signal));
+                                    } else {
+                                        Self::log_warn_wrong_type("signal's name");
                                     }
                                 }
                             } else {
@@ -405,6 +409,8 @@ impl CanMessage {
                             warn!("[WARNING] Unknown CAN message parameter \"{}\".", k);
                         }
                     }
+                } else {
+                    Self::log_warn_wrong_type("KEY");
                 }
             }
         }
