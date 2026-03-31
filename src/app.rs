@@ -38,7 +38,7 @@ impl App {
 
     pub fn load_can_messages(&mut self) {
         for file_in_path in
-            fs::read_dir(self.app_config.database_dir.clone()).expect("Failed to read directory.")
+            fs::read_dir(&self.app_config.database_dir).expect("Failed to read directory.")
         {
             let file_path = file_in_path.unwrap();
             let f_path = file_path.path();

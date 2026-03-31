@@ -179,7 +179,7 @@ impl Signal {
                         }
                         "signed" => {
                             if let Yaml::Boolean(v) = value {
-                                signal.signed = Some(v.clone());
+                                signal.signed = Some(*v);
                             } else {
                                 Self::log_warn_wrong_type(k);
                             }
@@ -239,7 +239,7 @@ impl Signal {
                                 for (value_key, value_val) in value_hash {
                                     if let Yaml::Integer(value_num) = value_key {
                                         let explanation = Translation::from_yaml(value_val);
-                                        signal.values.push((value_num.clone(), explanation));
+                                        signal.values.push((*value_num, explanation));
                                     } else {
                                         warn!("[WARNING] Expected integer in field \"values\".");
                                     }
@@ -250,7 +250,7 @@ impl Signal {
                         }
                         "unused" => {
                             if let Yaml::Boolean(v) = value {
-                                signal.unused = Some(v.clone());
+                                signal.unused = Some(*v);
                             } else {
                                 Self::log_warn_wrong_type(k);
                             }
@@ -336,7 +336,6 @@ impl CanMessage {
                         }
                         "type" => {
                             if let Yaml::String(v) = value {
-                                // message.bus_type = Some(v.clone());
                                 message.bus_type = match v.as_str() {
                                     "can" => BusType::CAN,
                                     _ => {

@@ -27,7 +27,7 @@ pub fn ui(frame: &mut Frame, app: &app::App) {
         .style(style::Style::default());
 
     let work_dir = widgets::Paragraph::new(text::Text::styled(
-        app.app_config.database_dir.clone(),
+        &app.app_config.database_dir,
         style::Style::default().fg(style::Color::Cyan),
     ))
     .block(work_dir_block);
@@ -42,18 +42,24 @@ pub fn ui(frame: &mut Frame, app: &app::App) {
     // Center chunk
     let mut list_items = Vec::<widgets::ListItem>::new();
 
-    for item in app.can_messages.clone() {
+    for item in &app.can_messages {
         list_items.push(widgets::ListItem::new(text::Line::from(
             text::Span::styled(
                 format!(
                     "{: <10}|{: <30}|{: >9}|{: >2}|{: <70}|{: <5}|",
-                    item.id.unwrap(),
-                    item.name.unwrap().chars().take(30).collect::<String>(),
-                    item.periodicity,
-                    item.length.unwrap(),
+                    item.id.as_ref().unwrap(),
+                    item.name
+                        .as_ref()
+                        .unwrap()
+                        .chars()
+                        .take(30)
+                        .collect::<String>(),
+                    &item.periodicity,
+                    &item.length.unwrap(),
                     item.comment
-                        .unwrap_or_default()
-                        .get("en")
+                        .as_ref()
+                        .map(|c| c.get("en"))
+                        .unwrap_or("")
                         .chars()
                         .take(70)
                         .collect::<String>(),
